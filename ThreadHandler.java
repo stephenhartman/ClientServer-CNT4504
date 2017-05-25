@@ -1,5 +1,14 @@
 import java.util.Scanner;
-
+/**
+ * ThreadHandler class to kick off Client program, offer menu choices, and pass (hostname, port number,
+ * menu selection) to the client through each client thread instantiated.
+ * 
+ * @author Stephen Hartman
+ * @author Seth Johnson
+ * @author Bing Lim
+ * @author Dan Sawyer
+ * @version 5/25/17
+ */
 public class ThreadHandler {
 
 	static String hostname = "";
@@ -7,21 +16,23 @@ public class ThreadHandler {
 	static int menuSelect = 0;
 
 	public static void main(String[] args) {
-
+		// If insufficient command line arguments, exit program with error message
 		if (args.length < 2) {
 			System.out.println("Please enter arguments in this format <server IP Address> <port number>\n");
 			System.exit(0);
 		}
-
 		hostname = args[0];
+		
 		try {
 			port = Integer.parseInt(args[1]);
-		} catch (NumberFormatException e) {
+		} catch (NumberFormatException e) {  // Handle non-integer command line argument (socket's 2nd argument is int)
 			System.out.println("User invalid input, please enter an Integer for port number.");
 			System.exit(-1);
 		}
 
 		menu();
+		
+		// Run concurrent client threads specified times
 		runThreads(1);
 		runThreads(5);
 		runThreads(10);
@@ -35,7 +46,11 @@ public class ThreadHandler {
 		runThreads(90);
 		runThreads(100);
 	}
-
+	/**
+	 * Runs threads to open client sockets according to the number of threads needed.
+	 * 
+	 * @param threadCount Number of concurrent clients necessary
+	 */
 	public static void runThreads(int threadCount) {
 
 		Thread[] t = new Thread[threadCount];
@@ -46,7 +61,9 @@ public class ThreadHandler {
 			t[i].run();
 		}
 	}
-
+	/**
+	 * Menu to display choices and evaluate menuSelect expression for socket connection.
+	 */
 	public static void menu() {
 
 		System.out.println("\n*** MENU ***: ");
@@ -92,6 +109,6 @@ public class ThreadHandler {
 		default:
 			break;
 		}
-		sc.close();
+		sc.close();  // close the Scanner object
 	}
 }
