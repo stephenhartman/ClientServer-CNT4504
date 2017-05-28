@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class ThreadHandler {
 
 	static String hostname = "";
-	static int port = 0;
+	static int port = 0;  // Server accepts port 2222
 	static int menuSelect = 0;
 
 	public static void main(String[] args) {
@@ -104,7 +104,6 @@ public class ThreadHandler {
 			break;
 		case 7:
 			System.out.println("Quit");
-			System.exit(5);
 			break;
 		default:
 			break;
