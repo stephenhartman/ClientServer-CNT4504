@@ -33,26 +33,32 @@ public class Client extends Thread {
 		double startTime;
 		double endTime;
 		Socket clientSocket;
+		int timeout = 15000;
 
 		try {
 			clientSocket = new Socket(hostname, port);
+			clientSocket.setSoTimeout(timeout);
 
+			
+			// Prints output from server
+			DataOutputStream os = new DataOutputStream(clientSocket.getOutputStream());
+			startTime = System.currentTimeMillis();  //Timer starts just before server request
+			os.writeChars("Request "+ menuSelect);  //Server acception format: "Request #"
+			
 			// Reads input from server
 			BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-			// Prints output from server
-			PrintStream os = new PrintStream(clientSocket.getOutputStream());
-
-			startTime = System.currentTimeMillis();  //Timer starts just before server request
-			os.println("Request " + menuSelect);  //Server acception format: "Request #"
-			String serverOutput = in.readLine();
-			System.out.println(serverOutput);
+			System.out.println(in);
+			
 			endTime = System.currentTimeMillis();  //Timer stops after last byte is sent
-
 			clientSocket.close();
-
-			System.out.println("Response time = " + (endTime - startTime));  //Print calculation of Response time
+			
+			// Print Response Time to file
+			FileWriter output = new FileWriter("output.txt", true);
+			output.write("\nResponse time = " + (endTime - startTime));  //Print calculation of Response time
+			output.close();
 		} catch (Exception e) {
 			System.out.println("Can't open socket at " + hostname + ":" + port); 
+			e.printStackTrace();
 			System.exit(-1);
 		}
 	}
